@@ -11,7 +11,7 @@ namespace HW12.Interface
     {
         public User Login(User user);
         public void Register(User user);
-       
+        public bool IsUserExists(string username, string password);
 
     }
 }

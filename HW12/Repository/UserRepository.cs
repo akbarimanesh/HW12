@@ -17,6 +17,10 @@ namespace HW12.Repository
             appDbContext = new AppDbContext();
         }
 
+        public bool IsUserExists(string username, string password)
+        {
+            return appDbContext.User.Any(x => x.UserName == username && x.Password == password);
+        }
 
         public User Login(User user)
         {

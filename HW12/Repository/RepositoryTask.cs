@@ -4,6 +4,7 @@ using HW12.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Intrinsics.Arm;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -53,9 +54,21 @@ namespace HW12.Repository
               
         }
 
-        public TaskUser SearchTask(string title)
+        public List<GetTaskDto> SearchTask(int id,string title)
         {
-            return appDbContext.taskUser.FirstOrDefault(p => p.Title == title);
+            
+            return appDbContext.taskUser.Where(x=>x.User.Id==id && x.Title.Contains(title))
+                .Select(x => new GetTaskDto()
+                {
+                    Id = x.Id,
+                    Title = x.Title,
+                    Description = x.Description,
+                    TimeToDone = x.TimeToDone,
+                    Priority = x.Priority,
+                    State = x.State,
+                    UserName = x.User.UserName,
+
+                }).ToList();
         }
 
         public void UpdateStatus(TaskUser task, int id)

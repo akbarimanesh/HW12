@@ -19,8 +19,26 @@ namespace HW12.Service
         }
         public Result RegisterU(User user)
         {
-            userrep.Register(user);
-            return new Result(true, "User registered successfully.");
+            if (!userrep.IsUserExists(user.UserName, user.Password))
+            {
+                if (user.UserName != "" && user.Password != "")
+                {
+                    userrep.Register(user);
+
+                    return new Result(true, "User registered successfully.");
+                }
+                else
+                {
+                    return new Result(false, "Please complete the form.");
+                }
+
+            }
+            else
+            {
+
+                return new Result(false, "User already exists.");
+            }
+
         }
         public Result LoginU(User user)
         {

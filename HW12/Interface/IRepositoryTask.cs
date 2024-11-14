@@ -17,7 +17,7 @@ namespace HW12.Interface
         public TaskUser GetTaskById(int id);
         
         public void UpdateStatus(TaskUser task, int id);
-        public TaskUser SearchTask(string title);
+        public List<GetTaskDto> SearchTask(int id, string title);
 
 
     }

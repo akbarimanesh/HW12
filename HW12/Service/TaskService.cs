@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace HW12.Service
+
 {
     public class TaskService
     {
@@ -71,11 +72,11 @@ namespace HW12.Service
                 return new Result(false, " Task does not exist.");
 
         }
-        public TaskUser SearchT(string title)
+        public List<GetTaskDto> SearchT(int id, string title)
         {
-            if (taskrep.SearchTask(title) != null)
+            if (taskrep.SearchTask(id,title) != null)
             {
-                return taskrep.SearchTask(title);
+                return taskrep.SearchTask(id,title);
 
             }
             else

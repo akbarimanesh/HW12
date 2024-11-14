@@ -6,6 +6,7 @@ using HW12.Service;
 using System.Data;
 using HW12;
 using HW12.Dto;
+using System.Threading.Tasks;
 TaskService taskService = new TaskService();
 UserService userService = new UserService();
 TaskUser taskUser = new TaskUser();
@@ -154,11 +155,13 @@ void Searchtask()
         ColoredConsole.Write($"{Blue("Please Enter Title :")}");
         string title = Console.ReadLine();
         ColoredConsole.WriteLine($"{Yellow("****************************************************")}");
-        var task1 = taskService.SearchT(title);
+        var task1 = taskService.SearchT(MemoryDb.CurrentUser.Id,title);
         if (task1 != null)
         {
 
-            Console.WriteLine($"Id= {task1.Id} / Title= {task1.Title} / Description={task1.Description} / Priority={task1.Priority} / TimeToDone={task1.TimeToDone} / State={task1.State}  ");
+            ConsoleTable.From<GetTaskDto>(task1.OrderBy(t => t.Priority))
+            .Configure(o => o.NumberAlignment = Alignment.Right)
+            .Write(Format.Minimal);
         }
         else
             ColoredConsole.WriteLine($"{Red("Task does not exist")}");
