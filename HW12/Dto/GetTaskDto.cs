@@ -1,12 +1,13 @@
-﻿using System;
+﻿using HW12.Entity;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HW12.Entity
+namespace HW12.Dto
 {
-    public class TaskUser
+    public class GetTaskDto
     {
         public int Id { get; set; }
         public string Title { get; set; }
@@ -14,17 +15,6 @@ namespace HW12.Entity
         public int Priority { get; set; }
         public DateTime TimeToDone { get; set; }
         public State State { get; set; } = State.Notdone;
-        public int UserId { get; set; }
-        public User User { get; set; }
+        public string  UserName { get; set; }
     }
-    public enum State
-    {
-        Notdone=1,
-        Inprogress,
-        Done,
-        Cancceled
-       
-    }
-
-
 }

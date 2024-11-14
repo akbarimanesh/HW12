@@ -11,7 +11,7 @@ namespace HW12
         public static string Connectionstring { get; set; }
        static Counfiguer()
         {
-            Connectionstring = @"Data Source=LEILI\LEILA;Initial Catalog=HW12;Integrated Security=true; TrustServerCertificate=True";
+            Connectionstring = @"Data Source=LEILI\LEILA;Initial Catalog=HW12-2;Integrated Security=true; TrustServerCertificate=True";
         }
     }
 }

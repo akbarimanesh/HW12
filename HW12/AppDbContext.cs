@@ -22,5 +22,6 @@ namespace HW12
             base.OnModelCreating(modelBuilder);
         }
         public DbSet<TaskUser> taskUser { get; set; }
+        public DbSet<User> User { get; set; }
     }
 }

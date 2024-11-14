@@ -1,4 +1,5 @@
-﻿using HW12.Entity;
+﻿using HW12.Dto;
+using HW12.Entity;
 using HW12.Interface;
 using HW12.Repository;
 using System;
@@ -21,9 +22,9 @@ namespace HW12.Service
             taskrep.CreateTask(taskUser);
             return new Result(true, "Task added successfully.");
         }
-        public List<TaskUser> GetAllT()
+        public List<GetTaskDto> GetAllT(User user)
         {
-            return taskrep.GetAllTask();
+            return taskrep.GetAllTask(user);
         }
         public TaskUser GetT(int id)
         {

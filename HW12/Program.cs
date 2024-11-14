@@ -4,64 +4,41 @@ using Colors.Net;
 using static Colors.Net.StringStaticMethods;
 using HW12.Service;
 using System.Data;
+using HW12;
+using HW12.Dto;
 TaskService taskService = new TaskService();
+UserService userService = new UserService();
 TaskUser taskUser = new TaskUser();
+User user = new User();
+
 int option;
-while (true)
+int option1;
+while(true)
 {
-    Console.Clear();
-    var task = taskService.GetAllT();
-    ConsoleTable.From<TaskUser>(task.OrderBy(t => t.Priority))
-        .Configure(o => o.NumberAlignment = Alignment.Right)
-        .Write(Format.Minimal);
-    ColoredConsole.WriteLine($"{Yellow("***********************************************************************************************************")}");
-   
-    ColoredConsole.WriteLine($"{White("***********************************Press a key to perform a task operation.********************************")}");
-    Console.ReadKey();
     try
     {
-
         do
         {
 
-
             Console.Clear();
-            ColoredConsole.WriteLine($"{White("1:New Task ")}");
-            ColoredConsole.WriteLine($"{White("2:Edit Task details ")}");
-            ColoredConsole.WriteLine($"{White("3:Edit Task State")}");
-            ColoredConsole.WriteLine($"{White("4:Search Task ")}");
-            ColoredConsole.WriteLine($"{White("5:Deleted product ")}");
-            ColoredConsole.WriteLine($"{White("6:Show Task list ")}");
-            ColoredConsole.WriteLine($"{Yellow("******************************")}");
-            ColoredConsole.Write($"{Blue("please Enter your option :")}");
-            option = int.Parse(Console.ReadLine());
-            switch (option)
+            ColoredConsole.WriteLine($"{White("1:Login ")}");
+            ColoredConsole.WriteLine($"{White("2:Register ")}");
+            ColoredConsole.Write($"{Blue("please Enter your option : ")}");
+            option1 = int.Parse(Console.ReadLine());
+            switch (option1)
             {
                 case 1:
-                    CreateTask();
+                    Login();
                     break;
                 case 2:
-                    EditTask();
-                    break;
-                case 3:
-                    EditState();
-                    break;
-                case 4:
-                    Searchtask();
-                    break;
-                case 5:
-                    Deleteproduct();
-                    break;
-                case 6:
-                    ShowAllTask();
+                    Register();
                     break;
                 default:
                     break;
             }
 
 
-        } while (option < 7);
-
+        } while (option1 < 3);
     }
     catch (Exception ex)
     {
@@ -69,56 +46,11 @@ while (true)
 
     }
     Console.ReadKey();
-
 }
-void CreateTask()
-{
-    try
-    {
-        Console.Clear();
-        ColoredConsole.Write($"{Blue("Please Enter Title:")}");
-        string title = Console.ReadLine();
-        ColoredConsole.Write($"{Blue("Please Enter Description :")}");
-        string description = Console.ReadLine();
-        ColoredConsole.Write($"{Blue("Please Enter Priority :")}");
-        int priority = int.Parse(Console.ReadLine());
-        ColoredConsole.Write($"{Blue("Please Enter TimeToDone :")}");
-        DateTime timeToDone = DateTime.Parse(Console.ReadLine());
-        taskUser.Title = title;
-        taskUser.Description = description;
-        taskUser.Priority = priority;
-        taskUser.TimeToDone = timeToDone;
-        var result = taskService.CreateT(taskUser);
-        if (result.IsSuccess)
-        {
-            ColoredConsole.WriteLine($"{Yellow("******************************")}");
-            ColoredConsole.WriteLine($"{Green(result.IsMessage)}");
-
-            Console.ReadKey();
-
-        }
-        else
-        {
-            ColoredConsole.WriteLine($"{Yellow("******************************")}");
-            ColoredConsole.WriteLine($"{Red(result.IsMessage)}");
-
-
-            Console.ReadKey();
-        }
-    }
-    catch (Exception ex)
-    {
-        ColoredConsole.WriteLine($"{Red("Please complete the form.")}");
-
-        Console.ReadKey();
 
 
 
-    }
 
-
-    Console.ReadKey();
-}
 
 
 
@@ -275,8 +207,8 @@ void Deleteproduct()
 void ShowAllTask()
 {
     Console.Clear();
-    var task = taskService.GetAllT();
-    ConsoleTable.From<TaskUser>(task.OrderBy(t => t.Priority))
+    var task = taskService.GetAllT(MemoryDb.CurrentUser);
+    ConsoleTable.From<GetTaskDto>(task.OrderBy(t => t.Priority))
         .Configure(o => o.NumberAlignment = Alignment.Right)
         .Write(Format.Minimal);
     Console.ReadKey();
@@ -305,4 +237,217 @@ void GetByIdT()
         ColoredConsole.WriteLine($"{Red("Select an product.")}");
     }
     Console.ReadKey();
+}
+void Login()
+{
+    try
+    {
+        Console.Clear();
+        ColoredConsole.Write($"{Blue("Please Enter UserName:")}");
+        string userName = Console.ReadLine();
+        ColoredConsole.Write($"{Blue("Please Enter Password :")}");
+        string password = Console.ReadLine();
+        user.UserName = userName;
+        user.Password = password;
+        var result = userService.LoginU(user);
+
+        if (result.IsSuccess)
+        {
+            ColoredConsole.WriteLine($"{Yellow("******************************")}");
+            ColoredConsole.WriteLine($"{Green(result.IsMessage)}");
+
+            Console.ReadKey();
+          
+                Console.Clear();
+                var task = taskService.GetAllT(MemoryDb.CurrentUser);
+                ConsoleTable.From<GetTaskDto>(task.OrderBy(t => t.Priority))
+                    .Configure(o => o.NumberAlignment = Alignment.Right)
+                    .Write(Format.Minimal);
+                ColoredConsole.WriteLine($"{Yellow("***********************************************************************************************************")}");
+
+                ColoredConsole.WriteLine($"{White("***********************************Press a key to perform a task operation.********************************")}");
+                Console.ReadKey();
+                try
+                {
+
+                    do
+                    {
+
+
+                        Console.Clear();
+                        ColoredConsole.WriteLine($"{White("1:New Task ")}");
+                        ColoredConsole.WriteLine($"{White("2:Edit Task details ")}");
+                        ColoredConsole.WriteLine($"{White("3:Edit Task State")}");
+                        ColoredConsole.WriteLine($"{White("4:Search Task ")}");
+                        ColoredConsole.WriteLine($"{White("5:Deleted product ")}");
+                        ColoredConsole.WriteLine($"{White("6:Show Task list ")}");
+                        ColoredConsole.WriteLine($"{White("7:Exit")}");
+                        ColoredConsole.WriteLine($"{Yellow("******************************")}");
+                        ColoredConsole.Write($"{Blue("please Enter your option :")}");
+                        option = int.Parse(Console.ReadLine());
+                        switch (option)
+                        {
+                            case 1:
+                                CreateTask();
+                                break;
+                            case 2:
+                                EditTask();
+                                break;
+                            case 3:
+                                EditState();
+                                break;
+                            case 4:
+                                Searchtask();
+                                break;
+                            case 5:
+                                Deleteproduct();
+                                break;
+                            case 6:
+                                ShowAllTask();
+                                break;
+                            case 7:
+                                logout();
+                                break;
+                            default:
+                                break;
+                        }
+
+
+                    } while (option < 7);
+
+                }
+                catch (Exception ex)
+                {
+                    ColoredConsole.WriteLine($"{Red("Select an option.")}");
+
+                }
+                //Console.ReadKey();
+
+            }
+
+        
+        else
+        {
+
+            ColoredConsole.WriteLine($"{Red(result.IsMessage)}");
+
+            Console.ReadKey();
+        }
+    }
+    catch (Exception ex)
+    {
+        ColoredConsole.WriteLine($"{Red("Please complete the form.")}");
+
+        Console.ReadKey();
+
+
+
+    }
+
+
+    Console.ReadKey();
+}
+
+void CreateTask()
+{
+    try
+    {
+        Console.Clear();
+        ColoredConsole.Write($"{Blue("Please Enter Title:")}");
+        string title = Console.ReadLine();
+        ColoredConsole.Write($"{Blue("Please Enter Description :")}");
+        string description = Console.ReadLine();
+        ColoredConsole.Write($"{Blue("Please Enter Priority :")}");
+        int priority = int.Parse(Console.ReadLine());
+        ColoredConsole.Write($"{Blue("Please Enter TimeToDone :")}");
+        DateTime timeToDone = DateTime.Parse(Console.ReadLine());
+
+        taskUser.Title = title;
+        taskUser.Description = description;
+        taskUser.Priority = priority;
+        taskUser.TimeToDone = timeToDone;
+        taskUser.UserId = MemoryDb.CurrentUser.Id;
+        var result = taskService.CreateT(taskUser);
+        if (result.IsSuccess)
+        {
+            ColoredConsole.WriteLine($"{Yellow("******************************")}");
+            ColoredConsole.WriteLine($"{Green(result.IsMessage)}");
+
+            Console.ReadKey();
+
+        }
+        else
+        {
+            ColoredConsole.WriteLine($"{Yellow("******************************")}");
+            ColoredConsole.WriteLine($"{Red(result.IsMessage)}");
+
+
+            Console.ReadKey();
+        }
+    }
+    catch (Exception ex)
+    {
+        ColoredConsole.WriteLine($"{Red("Please complete the form.")}");
+
+        Console.ReadKey();
+
+
+
+    }
+
+
+    Console.ReadKey();
+}
+void Register()
+{
+    try
+    {
+        Console.Clear();
+        ColoredConsole.Write($"{Blue("Please Enter UserName:")}");
+        string userName = Console.ReadLine();
+        ColoredConsole.Write($"{Blue("Please Enter Password :")}");
+        string password = Console.ReadLine();
+
+        user.UserName = userName;
+        user.Password = password;
+        var result =userService.RegisterU(user);
+        
+        if (result.IsSuccess)
+        {
+            ColoredConsole.WriteLine($"{Yellow("******************************")}");
+            ColoredConsole.WriteLine($"{Green(result.IsMessage)}");
+            Console.ReadKey();
+            Login();
+            Console.ReadKey();
+
+        }
+        else
+        {
+            ColoredConsole.WriteLine($"{Yellow("******************************")}");
+            ColoredConsole.WriteLine($"{Red(result.IsMessage)}");
+
+
+            Console.ReadKey();
+        }
+    }
+    catch (Exception ex)
+    {
+        ColoredConsole.WriteLine($"{Red("Please complete the form.")}");
+
+        Console.ReadKey();
+
+
+
+    }
+
+
+    Console.ReadKey();
+}
+void logout()
+
+{
+    MemoryDb.CurrentUser = null;
+    ColoredConsole.WriteLine($"{Red("Logout.")}");
+
+  
 }

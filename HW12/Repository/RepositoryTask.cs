@@ -1,4 +1,5 @@
-﻿using HW12.Entity;
+﻿using HW12.Dto;
+using HW12.Entity;
 using HW12.Interface;
 using System;
 using System.Collections.Generic;
@@ -27,10 +28,22 @@ namespace HW12.Repository
             appDbContext.SaveChanges();
         }
 
-        public List<TaskUser> GetAllTask()
+        public List<GetTaskDto> GetAllTask(User user)
         {
-            return appDbContext.taskUser.ToList();
-                
+            return appDbContext.taskUser.Where(x => x.UserId == user.Id)
+                .Select(x => new GetTaskDto()
+                {
+                    Id = x.Id,
+                    Title = x.Title,
+                    Description = x.Description,
+                    TimeToDone = x.TimeToDone,
+                    Priority = x.Priority,
+                    State = x.State,
+                    UserName = x.User.UserName,
+                }).ToList();
+
+
+
         }
 
         public TaskUser GetTaskById(int id)
